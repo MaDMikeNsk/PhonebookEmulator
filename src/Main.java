@@ -10,12 +10,10 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    private static boolean isValidInput (String inputStream) {
-        return inputStream.matches("([a-zA-Z\\s])+.*|(\\D\\s)+|([\\d-+()\\s]+)");
-    }
-
     private static boolean isName (String name) {
-      return name.matches("([a-zA-Z\\s])+.*[^STOPLI]|(\\D[^STOPLI]\\s)+");
+        if (name.equals("STOP")||name.equals("LIST")) {
+            return false;
+        } else return name.matches("[\\d\\D]+");
     }
 
     private static boolean isNumber (String number) {
@@ -51,59 +49,56 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
-        HashMap <String, String> phonebook = new HashMap<>();
+        HashMap <String, String> phoneBook = new HashMap<>();
 
         while (!command.equals("STOP")) {
-            do {
-                System.out.println("Введите что-нибудь:");
-                command = reader.readLine().trim();
-                if (!isValidInput(command)) {
-                    System.out.println("Invalid input");
-                }
-            } while(!isValidInput(command)); //<STOP> и <LIST> тоже Name
+            System.out.println("Введите имя или номер, или операционные команды (STOP,LIST):");
+            command = reader.readLine().trim();
             String contactName = "";
-            String number = "";
+            String contactNumber = "";
 
             if (!command.equals("STOP") && !command.equals("LIST")){
                 //Если ввели номер
                 if (isNumber(command)) {
-                    command = command.replaceAll("[+\\-()\\s]*", "");
-                    if (phonebook.containsKey(command)) {
-                        System.out.println(phonebook.get(command) + " /" + command + "/");
+                    contactNumber = command.replaceAll("[+\\-()\\s]*", "");
+                    if (phoneBook.containsKey(contactNumber)) {
+                        System.out.println(phoneBook.get(contactNumber) + " /" + contactNumber + "/");
                     } else {
                         while (!isName(contactName)) {
                             System.out.println("Введите имя абонента для добавления в список контактов:");
                             contactName = reader.readLine().trim();
                             if (!isName(contactName)){
-                                System.out.println("Неправильный формат ввода имени");
+                                System.out.println("Неверный формат имени");
                             }
                         }
-                        phonebook.put(command,contactName);
+                        phoneBook.put(contactNumber,contactName);
                     }
+
                 //Если ввели имя
                 } else if (isName(command)) {
-                    if (phonebook.containsValue(command)) {
-                        Set keys = getKeysByValue(phonebook, command);
+                    contactName = command;
+                    if (phoneBook.containsValue(contactName)) {
+                        Set keys = getKeysByValue(phoneBook, contactName);
                         for (Object key : keys) {
-                            System.out.println(command + " /" + key + "/");
+                            System.out.println(contactName + " /" + key + "/");
                         }
 
                     } else {
-                        while (!isNumber(number)) {
+                        while (!isNumber(contactNumber)) {
                             System.out.println("Введите номер абонента:");
-                            number = reader.readLine().trim();
-                            if (!isNumber(number)) {
-                                System.out.println("Неправильный формат ввода номера");
+                            contactNumber = reader.readLine().trim();
+                            if (!isNumber(contactNumber)) {
+                                System.out.println("Неверный формат номера");
                             }
                         }
-                        number = number.replaceAll("[+\\-()\\s]*", "");
-                        phonebook.put(number, command);
+                        contactNumber = contactNumber.replaceAll("[+\\-()\\s]*", "");
+                        phoneBook.put(contactNumber, contactName);
                     }
                 }
 
                 //Если ввели команду <LIST>
                 } else if (command.equals("LIST")) {
-                    list(phonebook);
+                    list(phoneBook);
                 //Если ввели команду <STOP>
                 } else {
                     System.out.println("Программа звершила работу. До свидания!");
