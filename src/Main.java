@@ -99,6 +99,7 @@ public class Main {
                 //Если ввели команду <LIST>
                 } else if (command.equals("LIST")) {
                     list(phoneBook);
+
                 //Если ввели команду <STOP>
                 } else {
                     System.out.println("Программа звершила работу. До свидания!");
