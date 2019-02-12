@@ -13,7 +13,7 @@ public class Main {
     private static boolean isName (String name) {
         if (name.equals("STOP")||name.equals("LIST")) {
             return false;
-        } else return name.matches("[\\d\\D]+");
+        } else return name.matches(".+[a-zA-Z]+"); //Имя должно содержать хотя бы одну букву
     }
 
     private static boolean isNumber (String number) {
@@ -50,6 +50,8 @@ public class Main {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
         HashMap <String, String> phoneBook = new HashMap<>();
+        final String ANSI_RED = "\u001B[31m";
+        final String ANSI_RESET = "\u001B[0m";
 
         while (!command.equals("STOP")) {
             System.out.println("Введите имя или номер, или операционные команды (STOP,LIST):");
@@ -65,10 +67,10 @@ public class Main {
                         System.out.println(phoneBook.get(contactNumber) + " /" + contactNumber + "/");
                     } else {
                         while (!isName(contactName)) {
-                            System.out.println("Введите имя абонента для добавления в список контактов:");
+                            System.out.println("Введите имя абонента ");
                             contactName = reader.readLine().trim();
                             if (!isName(contactName)){
-                                System.out.println("Неверный формат имени");
+                                System.out.println(ANSI_RED + "Неверный формат имени" + ANSI_RESET);
                             }
                         }
                         phoneBook.put(contactNumber,contactName);
@@ -88,7 +90,7 @@ public class Main {
                             System.out.println("Введите номер абонента:");
                             contactNumber = reader.readLine().trim();
                             if (!isNumber(contactNumber)) {
-                                System.out.println("Неверный формат номера");
+                                System.out.println(ANSI_RED + "Неверный формат номера" + ANSI_RESET);
                             }
                         }
                         contactNumber = contactNumber.replaceAll("[+\\-()\\s]*", "");
