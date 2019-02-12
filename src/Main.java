@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Main {
     private static boolean isName (String name) {
-        if (name.equals("STOP")||name.equals("LIST")) {
+        if (name.equals("STOP")||name.equals("LIST")) { //Нельзя называть контакт именем операционной команды
             return false;
         } else return name.matches(".+[a-zA-Z]+"); //Имя должно содержать хотя бы одну букву
     }
@@ -45,7 +45,7 @@ public class Main {
         }
         return keys;
     }
-//
+
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
